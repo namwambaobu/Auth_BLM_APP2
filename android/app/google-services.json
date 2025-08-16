@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "612409373130",
+    "project_id": "blm-app-f87d5",
+    "storage_bucket": "blm-app-f87d5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612409373130:android:f1ec590f105c62be6d1f33",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGRlK3ao2eAJNNDR3xzHLTawk04p9YzlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
