@@ -10,33 +10,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/repos/auth_repo.dart';
 
-class AuthCubit extends Cubit<AuthState>{
+class AuthCubit extends Cubit<AuthState> {
   final AuthRepo authRepo;
 
   AppUser? _currentUser;
 
-  AuthCubit({required this.authRepo}): super(AuthInitial());
+  AuthCubit({required this.authRepo}) : super(AuthInitial());
 
-  //get current user
-AppUser? get currentUser => _currentUser;
+  // Get current user
+  AppUser? get currentUser => _currentUser;
 
-//cHECK IF USER IS AUTHENTICATED
-void checkAuth()async {
-  //Loading
-  emit(AuthLoading());
+  // Check if user is authenticated
+  void checkAuth() async {
+    emit(AuthLoading());
 
-  //get current user
-  final AppUser? user = await authRepo.getCurrentUser();
+    final AppUser? user = await authRepo.getCurrentUser();
 
-  //check if user exists then authenticated, if not user > unauthenticated
-  if (user != null) {
-    _currentUser = user;
-    emit(Authenticated(user));
-  } else {
-    emit(Unauthenticated());
+    if (user != null) {
+      _currentUser = user;
+      emit(Authenticated(user));
+    } else {
+      emit(Unauthenticated());
+    }
   }
-}
-  //login with email + pw
+
+  // Login with email + password
   Future<void> login(String email, String pw) async {
     try {
       emit(AuthLoading());
@@ -48,15 +46,14 @@ void checkAuth()async {
       } else {
         emit(Unauthenticated());
       }
-    }
-    catch (e) {
+    } catch (e) {
       emit(AuthError(e.toString()));
       emit(Unauthenticated());
     }
   }
 
-  //Register
-  Future<void> register(String name,String email, String pw) async {
+  // Register
+  Future<void> register(String name, String email, String pw) async {
     try {
       emit(AuthLoading());
       final user = await authRepo.registerWithEmailPassword(name, email, pw);
@@ -67,13 +64,38 @@ void checkAuth()async {
       } else {
         emit(Unauthenticated());
       }
-    }
-    catch (e) {
+    } catch (e) {
       emit(AuthError(e.toString()));
       emit(Unauthenticated());
     }
   }
 
-//logout
+  // Logout
+  Future<void> logout() async {
+    emit(AuthLoading());
+    await authRepo.logout();
+    emit(Unauthenticated());
+  }
 
+  // Forgot password
+  Future<String> forgortPassword(String email) async {
+    try {
+      final message = await authRepo.sendPasswordResetEmail(email);
+      return message ?? 'Password reset email could not be sent.';
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  // Delete account
+  Future<void> deleteAccount() async {
+    try {
+      emit(AuthLoading());
+      await authRepo.deleteAccount();
+      emit(Unauthenticated());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+      emit(Unauthenticated());
+    }
+  }
 }
