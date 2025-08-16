@@ -1,0 +1,9 @@
+git init
+
+git add .
+
+git commit -m "Addition of the login page"
+
+git remote add origin https://github.com/namwambaobu/Auth_BLM_APP2.git
+
+git push -u origin master
