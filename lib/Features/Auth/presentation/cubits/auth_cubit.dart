@@ -56,7 +56,24 @@ void checkAuth()async {
   }
 
   //Register
+  Future<void> register(String name,String email, String pw) async {
+    try {
+      emit(AuthLoading());
+      final user = await authRepo.registerWithEmailPassword(name, email, pw);
 
+      if (user != null) {
+        _currentUser = user;
+        emit(Authenticated(user));
+      } else {
+        emit(Unauthenticated());
+      }
+    }
+    catch (e) {
+      emit(AuthError(e.toString()));
+      emit(Unauthenticated());
+    }
+  }
 
+//logout
 
 }
