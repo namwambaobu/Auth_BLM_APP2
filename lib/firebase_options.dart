@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'blm-app-f87d5',
     storageBucket: 'blm-app-f87d5.firebasestorage.app',
   );
+
 }
