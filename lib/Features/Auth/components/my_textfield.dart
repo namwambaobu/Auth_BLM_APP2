@@ -4,7 +4,7 @@ class MyTextfield extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obsecureText;
-  MyTextfield({
+  const MyTextfield({
     super.key,
     required this.controller,
     required this.hintText,

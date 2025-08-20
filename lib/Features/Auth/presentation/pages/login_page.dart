@@ -16,12 +16,14 @@ import 'package:flutter_application_1/Features/Auth/components/my_button.dart';
 import 'package:flutter_application_1/Features/Auth/components/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final void Function() togglePages;
+  const LoginPage({super.key, required this.togglePages});
 
   @override
   State<LoginPage> createState() => _loginPageState();
 }
 
+// ignore: camel_case_types
 class _loginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final pwController = TextEditingController();
@@ -97,11 +99,14 @@ class _loginPageState extends State<LoginPage> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                Text(
-                  "Register now.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+                GestureDetector(
+                  onTap: widget.togglePages,
+                  child: Text(
+                    "Register now.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ],
