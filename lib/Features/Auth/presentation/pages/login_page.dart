@@ -14,6 +14,8 @@ on this page the user is able to login with their :
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Features/Auth/components/my_button.dart';
 import 'package:flutter_application_1/Features/Auth/components/my_textfield.dart';
+import 'package:flutter_application_1/Features/Auth/presentation/cubits/auth_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function() togglePages;
@@ -27,6 +29,67 @@ class LoginPage extends StatefulWidget {
 class _loginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final pwController = TextEditingController();
+
+  late final authCubit = context.read<AuthCubit>();
+
+  void Login() {
+    final String email = emailController.text.trim();
+    final String pw = pwController.text;
+
+    if (email.isNotEmpty && pw.isNotEmpty) {
+      authCubit.login(email, pw);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter both email and password!")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    pwController.dispose();
+    super.dispose();
+  }
+
+  void openForgortPassword() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Forgot Password"),
+        content: MyTextfield(
+          controller: emailController,
+          hintText: "Enter your email",
+          obsecureText: false,
+        ),
+        actions: [
+          //cancel button
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          //reset button
+          TextButton(
+            onPressed: () async {
+              String message = await authCubit.forgortPassword(
+                emailController.text,
+              );
+              if (message ==
+                  "Password reset Email sent! Please check your inbox") {
+                Navigator.pop(context);
+                emailController.clear();
+              }
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
+            },
+            child: Text("Reset"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     //SCAFFOLD
@@ -74,12 +137,15 @@ class _loginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => openForgortPassword(),
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -87,7 +153,7 @@ class _loginPageState extends State<LoginPage> {
             const SizedBox(height: 25),
 
             //LOGIN BUTTON
-            MyButton(onTap: () {}, text: "Login"),
+            MyButton(onTap: Login, text: "Login"),
             //OAUTH SIGN IN LATER.. (google + apple
             //
             //DO NOT HAYE AN ACCOUNT SIGN UP

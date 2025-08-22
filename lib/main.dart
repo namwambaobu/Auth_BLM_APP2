@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Features/Auth/Themes/light_mode.dart';
+import 'package:flutter_application_1/Features/Auth/components/loading_screen.dart';
 import 'package:flutter_application_1/Features/Auth/data/firebase_auth_repo.dart';
 import 'package:flutter_application_1/Features/Auth/presentation/cubits/auth_cubit.dart';
 import 'package:flutter_application_1/Features/Auth/presentation/cubits/auth_states.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
             }
             //loading...
             else {
-              return Center(child: CircularProgressIndicator());
+              return LoadingScreen();
             }
           },
           listener: (context, state) {
